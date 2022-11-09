@@ -4,11 +4,21 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="73cbbcde-36cb-4715-9ecc-d4bcc3c19021" name="Changes" comment="First Commit:login and register finished." />
+    <list default="true" id="73cbbcde-36cb-4715-9ecc-d4bcc3c19021" name="Changes" comment="First Commit:login and register finished.">
+      <change afterPath="$PROJECT_DIR$/model/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/model/models.py" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Python Script" />
+      </list>
+    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -53,6 +63,7 @@
         </entry>
       </map>
     </option>
+    <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="First Commit:login and register finished." />

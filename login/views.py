@@ -1,7 +1,8 @@
 from django.shortcuts import render
 from django.shortcuts import redirect
-from model import models
-from . import forms
+from . import forms, models
+
+
 # Create your views here.
 
 def login(request):

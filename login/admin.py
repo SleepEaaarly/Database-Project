@@ -1,7 +1,14 @@
-from django.contrib import admin
-
 # Register your models here.
 
-from model import models
+from . import models
+from django.contrib import admin
 
-admin.site.register(models.User)
+admin.site.register(models.Student)
+admin.site.register(models.Teacher)
+admin.site.register(models.Lab)
+admin.site.register(models.Enterprise)
+admin.site.register(models.SchoolMate)
+admin.site.register(models.Post)
+admin.site.register(models.Resume)
+admin.site.register(models.Position)
+admin.site.register(models.Message)

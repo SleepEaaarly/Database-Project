@@ -1,0 +1,106 @@
+from django.db import models
+
+# Create your models here.
+
+class User(models.Model):
+    id = models.AutoField(primary_key=True)
+    # id: primary key
+    real_name = models.CharField(max_length=128)
+    # name: real name of a person
+    username = models.CharField(max_length=128)
+    # username: name of a user in this app
+    password = models.CharField(max_length=256)
+    # password
+    email = models.EmailField(unique=True, max_length=128)
+    # email
+    sex_choice = (
+        ('male', "男"),
+        ('female', "女"),
+    )
+    sex = models.CharField(max_length=10, choices=sex_choice, default='male')
+    # sex: male or female
+
+    class Meta:
+        ordering = ["id"]
+
+
+class PosPublisher(User):
+    pass
+
+
+class Student(User):
+    school_name = models.CharField(max_length=128)
+
+    grade_choice = (
+        ('大一', '大一'),
+        ('大二', '大二'),
+        ('大三', '大三'),
+        ('大四', '大四'),
+        ('研一', '研一'),
+        ('研二', '研二'),
+        ('研三', '研三'),
+        ('博一', '博一'),
+        ('博二', '博二'),
+    )
+
+    grade = models.CharField(max_length=10, choices=grade_choice, default='大四')
+
+    major = models.CharField(max_length=128)
+
+
+class Teacher(PosPublisher):
+    profession_title = models.CharField(max_length=128)
+    # 职称
+    research_direction = models.CharField(max_length=128)
+    # 研究方向
+    lab_belonging = models.ForeignKey("Lab", on_delete=models.CASCADE, blank=True, null=True)
+
+
+class SchoolMate(PosPublisher):
+    school_name = models.CharField(max_length=128)
+
+    work_field = models.CharField(max_length=128)
+
+    enterprise_belonging = models.ForeignKey("Enterprise", on_delete=models.CASCADE, blank=True, null=True)
+
+class Enterprise(models.Model):
+    name = models.CharField(max_length=128)
+
+    industry = models.CharField(max_length=128)
+    # 所属行业
+    place = models.CharField(max_length=128)
+
+
+class Lab(models.Model):
+    name = models.CharField(max_length=128)
+
+
+class Position(models.Model):
+    name = models.CharField(max_length=128)
+    posPublisher = models.ForeignKey(PosPublisher, on_delete=models.CASCADE, blank=True, null=True)
+    description = models.CharField(max_length=256)
+    demanding = models.CharField(max_length=256)
+    salary = models.IntegerField()
+
+
+class Post(models.Model):
+    content = models.CharField(max_length=1024)
+    last_update_time = models.DateTimeField()
+    last_update_user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
+
+
+class Resume(models.Model):
+    content = models.CharField(max_length=1024)
+    sender = models.ForeignKey(Student, on_delete=models.CASCADE, blank=True, null=True)
+    receiver = models.ForeignKey(PosPublisher, on_delete=models.CASCADE, blank=True, null=True)
+
+
+class Message(models.Model):
+    sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name="message_sender", blank=True, null=True)
+    receiver = models.ForeignKey(User, on_delete=models.CASCADE, related_name="message_receiver", blank=True, null=True)
+    content = models.CharField(max_length=256)
+
+
+class Adminer(User):
+    # todo
+    pass

@@ -21,10 +21,11 @@ class User(models.Model):
     # sex: male or female
 
     class Meta:
-        abstract = True
         ordering = ["id"]
-        verbose_name = "用户"
-        verbose_name_plural = verbose_name
+
+
+class PosPublisher(User):
+    pass
 
 
 class Student(User):
@@ -47,19 +48,20 @@ class Student(User):
     major = models.CharField(max_length=128)
 
 
-class Teacher(User):
+class Teacher(PosPublisher):
     profession_title = models.CharField(max_length=128)
     # 职称
     research_direction = models.CharField(max_length=128)
     # 研究方向
-    lab_name = models.CharField(max_length=128)
+    lab_belonging = models.ForeignKey("Lab", on_delete=models.CASCADE, blank=True, null=True)
 
 
-class SchoolMate(User):
+class SchoolMate(PosPublisher):
     school_name = models.CharField(max_length=128)
 
     work_field = models.CharField(max_length=128)
 
+    enterprise_belonging = models.ForeignKey("Enterprise", on_delete=models.CASCADE, blank=True, null=True)
 
 class Enterprise(models.Model):
     name = models.CharField(max_length=128)
@@ -67,7 +69,7 @@ class Enterprise(models.Model):
     industry = models.CharField(max_length=128)
     # 所属行业
     place = models.CharField(max_length=128)
-    
+
 
 class Lab(models.Model):
     name = models.CharField(max_length=128)
@@ -76,25 +78,26 @@ class Lab(models.Model):
 class Post(models.Model):
     content = models.CharField(max_length=1024)
     last_update_time = models.DateTimeField()
-    last_update_user = models.ForeignKey(User, on_delete=models.CASCADE)
+    last_update_user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
 
 
 class Resume(models.Model):
     content = models.CharField(max_length=1024)
-    owner = models.ForeignKey(User, on_delete=models.CASCADE)
+    sender = models.ForeignKey(Student, on_delete=models.CASCADE, blank=True, null=True)
+    receiver = models.ForeignKey(PosPublisher, on_delete=models.CASCADE, blank=True, null=True)
 
 
 class Position(models.Model):
     name = models.CharField(max_length=128)
-    enterprise = models.ForeignKey(Enterprise, on_delete=models.CASCADE)
+    enterprise = models.ForeignKey(Enterprise, on_delete=models.CASCADE, blank=True, null=True)
     description = models.CharField(max_length=256)
     demanding = models.CharField(max_length=256)
     salary = models.IntegerField()
 
 
 class Message(models.Model):
-    sender = models.ForeignKey(User, on_delete=models.CASCADE)
-    receiver = models.ForeignKey(User, on_delete=models.CASCADE)
+    sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name="message_sender", blank=True, null=True)
+    receiver = models.ForeignKey(User, on_delete=models.CASCADE, related_name="message_receiver", blank=True, null=True)
     content = models.CharField(max_length=256)
 
 

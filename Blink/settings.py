@@ -77,7 +77,7 @@ WSGI_APPLICATION = "Blink.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.mysql",
-        "NAME": "Blink",
+        "NAME": "Blink_v0",
         "USER": "root",
         "PASSWORD": "paradise2002",
         "HOST": "127.0.0.1",

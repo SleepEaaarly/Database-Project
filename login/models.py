@@ -18,6 +18,8 @@ class User(models.Model):
     )
     sex = models.CharField(max_length=10, choices=sex_choice, default='male')
     # sex: male or female
+    status = models.CharField(max_length=10)
+    # status: init 0
     type = models.CharField(max_length=10)
     # type:
 
@@ -69,8 +71,6 @@ class Enterprise(models.Model):
     name = models.CharField(max_length=128)
 
     industry = models.CharField(max_length=128)
-    # 所属行业
-    place = models.CharField(max_length=128)
 
 
 class Lab(models.Model):
@@ -86,21 +86,28 @@ class Position(models.Model):
     description = models.CharField(max_length=256)
     demanding = models.CharField(max_length=256)
     salary = models.CharField(max_length=32)
+    place = models.CharField(max_length=128)
+    label1 = models.CharField(max_length=128, blank=True, null=True)
+    label2 = models.CharField(max_length=128, blank=True, null=True)
+    label3 = models.CharField(max_length=128, blank=True, null=True)
 
 
 class Post(models.Model):
     id = models.CharField(primary_key=True, max_length=128)
+    title = models.CharField(max_length=128)
     content = models.CharField(max_length=1024)
-    last_update_time = models.DateTimeField()
-    last_update_user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
 
 
 class Resume(models.Model):
     id = models.CharField(primary_key=True, max_length=128)
     name = models.CharField(unique=True, max_length=128)
-    content = models.CharField(max_length=1024)
+    edu_background = models.CharField(max_length=1024)
+    per_statement = models.CharField(max_length=1024)
+    experience = models.CharField(max_length=1024)
     sender = models.ForeignKey(Student, on_delete=models.CASCADE, blank=True, null=True)
     receiver = models.ManyToManyField(to=PosPublisher, through='Resume_Receiver')
+    status = models.CharField(max_length=8)
+    # init "0"
 
 
 class Resume_Receiver(models.Model):

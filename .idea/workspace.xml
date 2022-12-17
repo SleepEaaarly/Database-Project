@@ -6,12 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="76a2e5fb-52de-4358-9a76-74bc14fb2d77" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api.md" beforeDir="false" afterPath="$PROJECT_DIR$/api.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/login/migrations/0001_initial4.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/login/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/login/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/login/sql.py" beforeDir="false" afterPath="$PROJECT_DIR$/login/sql.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/login/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/login/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/大作业大助手.md" beforeDir="false" afterPath="$PROJECT_DIR$/大作业大助手.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/login/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/login/urls.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

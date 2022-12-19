@@ -14,7 +14,7 @@ class Login(APIView):
         user = sql.findUser(username)
         response = dict()
 
-        if user:
+        if len(user) != 0:
             db_password = user[0][3]
             status = user[0][5]
             if status == "0":

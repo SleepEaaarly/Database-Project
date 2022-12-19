@@ -24,7 +24,6 @@ class User(models.Model):
     # type:
 
 
-
 class PosPublisher(User):
     pass
 

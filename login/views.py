@@ -23,7 +23,38 @@ class Login(APIView):
                 return Response(response)
             if password == db_password:
                 response['success'] = 1
-                return Response(response)
+
+                response['id'] = user[0][0]
+                response['username'] = user[0][1]
+                response['real_name'] = user[0][2]
+                response['password'] = user[0][3]
+                response['sex'] = user[0][4]
+                response['status'] = user[0][5]
+                response['type'] = user[0][6]
+                db_type = user[0][6]
+
+                if db_type == "0":
+                    student = sql.findStudent(username)
+                    response['school_name'] = student[0][1]
+                    response['grade'] = student[0][2]
+                    response['major'] = student[0][3]
+                    return Response(response)
+                elif db_type == "1":
+                    teacher = sql.findTeacher(username)
+                    response['profession_title'] = teacher[0][1]
+                    response['research_direction'] = teacher[0][2]
+                    response['lab_belonging_id'] = teacher[0][3]
+                    return Response(response)
+                elif db_type == "2":
+                    schoolMate = sql.findSchoolMate(username)
+                    response['school_name'] = schoolMate[0][1]
+                    response['work_field'] = schoolMate[0][2]
+                    response['enterprise_belonging_id'] = schoolMate[0][3]
+                    return Response(response)
+                else:
+                    # db_type == "3"
+                    return Response(response)
+
             else:
                 # password wrong
                 response['success'] = 0
@@ -34,6 +65,35 @@ class Login(APIView):
             response['success'] = 0
             return Response(response)
 
+'''
+class Login(APIView):
+    def get(self, request):
+        username = request.GET.get('username')
+        password = request.GET.get('password')
+
+        user = sql.findUser(username)
+        response = dict()
+
+        if len(user) != 0:
+            db_password = user[0][3]
+            status = user[0][5]
+            if status == "0":
+                response['success'] = 2
+                # waiting for judge
+                return Response(response)
+            if password == db_password:
+                response['success'] = 1
+                return Response(response)
+            else:
+                # password wrong
+                response['success'] = 0
+                return Response(response)
+
+        else:
+            # username wrong
+            response['success'] = 0
+            return Response(response)
+'''
 
 class Register(APIView):
     def get(self, request):

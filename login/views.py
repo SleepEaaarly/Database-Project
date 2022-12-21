@@ -434,4 +434,37 @@ class DeletePost(APIView):
 
 class StatisticUserType(APIView):
     def get(self, request):
+        student_num = sql.getStudentNum()[0][0]
+        teacher_num = sql.getTeacherNum()[0][0]
+        schoolmate_num = sql.getSchoolMateNum()[0][0]
 
+        return Response({'student_num': student_num, 'teacher_num': teacher_num, 'schoolmate_num': schoolmate_num})
+
+
+class StatisticPlaceType(APIView):
+    def get(self, request):
+        school_num = sql.getSchoolNum()[0][0]
+        enterprise_num = sql.getEnterpriseNum()[0][0]
+        lab_num = sql.getLabNum()[0][0]
+
+        return Response({'school_num': school_num, 'enterprise_num': enterprise_num, 'lab_num': lab_num})
+
+
+class StatisticSalaryType(APIView):
+    def get(self, request):
+        num1 = sql.getSalaryNum('3k以下')
+        num2 = sql.getSalaryNum('3k-5k')
+        num3 = sql.getSalaryNum('5k-8k')
+        num4 = sql.getSalaryNum('8k-10k')
+        num5 = sql.getSalaryNum('10k以上')
+
+        return Response({'num1': num1, 'num2': num2, 'num3': num3, 'num4': num4, 'num5': num5})
+
+
+class StatisticLabel1Type(APIView):
+    def get(self, request):
+        num1 = sql.getLabel1Num('IT科技')
+        num2 = sql.getLabel1Num('文化传媒')
+        num3 = sql.getLabel1Num('金融财务')
+
+        return Response({'num1': num1, 'num2': num2, 'num3': num3})

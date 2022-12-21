@@ -779,6 +779,88 @@ def getSchoolMateNum():
     return result
 
 
+def getSchoolNum():
+    connection, cursor = connect_database()
+
+    instruction = "select count(distinct school_name) from login_student"
+
+    try:
+        cursor.execute(instruction)
+    except Exception as e:
+        connection.rollback()
+        print("执行MySQL错误")
+    result = cursor.fetchall()
+    close_database(connection, cursor)
+
+    return result
+
+
+def getEnterpriseNum():
+    connection, cursor = connect_database()
+
+    instruction = "select count(*) from login_enterprise"
+
+    try:
+        cursor.execute(instruction)
+    except Exception as e:
+        connection.rollback()
+        print("执行MySQL错误")
+    result = cursor.fetchall()
+    close_database(connection, cursor)
+
+    return result
+
+
+def getLabNum():
+    connection, cursor = connect_database()
+
+    instruction = "select count(*) from login_lab"
+
+    try:
+        cursor.execute(instruction)
+    except Exception as e:
+        connection.rollback()
+        print("执行MySQL错误")
+    result = cursor.fetchall()
+    close_database(connection, cursor)
+
+    return result
+
+
+def getSalaryNum(salary_range):
+    connection, cursor = connect_database()
+
+    instruction = "select count(*) from login_position" \
+                  "where salary=%s"
+
+    try:
+        cursor.execute(instruction, [salary_range])
+    except Exception as e:
+        connection.rollback()
+        print("执行MySQL错误")
+    result = cursor.fetchall()
+    close_database(connection, cursor)
+
+    return result
+
+
+def getLabel1Num(label1):
+    connection, cursor = connect_database()
+
+    instruction = "select count(*) from login_position" \
+                  "where label1=%s"
+
+    try:
+        cursor.execute(instruction, [label1])
+    except Exception as e:
+        connection.rollback()
+        print("执行MySQL错误")
+    result = cursor.fetchall()
+    close_database(connection, cursor)
+
+    return result
+
+
 def clearAdminer():
     connection, cursor = connect_database()
 
@@ -961,8 +1043,6 @@ def createPost(id, title, content):
     close_database(connection, cursor)
 
 
-
-
 def createPosition(id, name, description, demanding, salary, posPublisher, place, label1, label2, label3):
 
     connection, cursor = connect_database()
@@ -982,6 +1062,7 @@ def createPosition(id, name, description, demanding, salary, posPublisher, place
 
 def createUserIdOnly(id, username):
     createUser(id, username, "none", "none", "male", "none", "0")
+
 
 def createPosPublisherIdOnly(id):
     createPosPublisher(id)
@@ -1006,9 +1087,11 @@ if __name__ == "__main__":
     createPosPublisherIdOnly("cjj")
     createPosition('wh-work', 'work', 'to be wh xiaodi', 'male', '1234', 'wh', 'beijing', '1', '2', '')
     createPosition('cjj-work', 'work', 'to be cjj baobiao', 'female', '5678', 'cjj', 'sh', '1', '', '')
+    createStudent("lsz",'lsz','lsz','lsz250','male','0','BUAA','l_three', 'rap', "0")
+    createStudent("wxz", "wxz", "wxz", "wxz777", "male", "0", "BUAA", "l_three", "1", "1")
     rst = findAllPosition()
-    num = getStudentNum()
-    print(getStudentNum())
+    num = getSchoolNum()
+    print(getSchoolNum())
     print(rst)
 '''
     for i in range(5):

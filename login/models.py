@@ -13,10 +13,10 @@ class User(models.Model):
     password = models.CharField(max_length=256)
     # password
     sex_choice = (
-        ('male', "男"),
-        ('female', "女"),
+        ('男', "男"),
+        ('女', "女"),
     )
-    sex = models.CharField(max_length=10, choices=sex_choice, default='male')
+    sex = models.CharField(max_length=10, choices=sex_choice, default='男')
     # sex: male or female
     status = models.CharField(max_length=10)
     # status: init 0
@@ -32,15 +32,15 @@ class Student(User):
     school_name = models.CharField(max_length=128)
 
     grade_choice = (
-        ('l_one', '大一'),
-        ('l_two', '大二'),
-        ('l_three', '大三'),
-        ('l_four', '大四'),
-        ('m_one', '研一'),
-        ('m_two', '研二'),
-        ('m_three', '研三'),
-        ('h_one', '博一'),
-        ('h_two', '博二'),
+        ('大一', '大一'),
+        ('大二', '大二'),
+        ('大三', '大三'),
+        ('大四', '大四'),
+        ('研一', '研一'),
+        ('研二', '研二'),
+        ('研三', '研三'),
+        ('博一', '博一'),
+        ('博二', '博二'),
     )
 
     grade = models.CharField(max_length=10, choices=grade_choice, default='大四')

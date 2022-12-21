@@ -1083,6 +1083,7 @@ if __name__ == "__main__":
     createUserIdOnly("wh", "wh")
     createPosPublisherIdOnly("wh")
 
+'''
     createUserIdOnly("cjj", "cjj")
     createPosPublisherIdOnly("cjj")
     createPosition('wh-work', 'work', 'to be wh xiaodi', 'male', '1234', 'wh', 'beijing', '1', '2', '')
@@ -1093,6 +1094,8 @@ if __name__ == "__main__":
     num = getSchoolNum()
     print(getSchoolNum())
     print(rst)
+'''
+
 '''
     for i in range(5):
         createLab("lab"+str(i), "lab"+str(i))

@@ -145,8 +145,7 @@
 {
     id (sender+receiver+position.name)
     resume(sender+name)
-    receiver(username)
-    (position.name)
+    改：position.id(receiver+position.name)
 }
 //output
 {
@@ -172,6 +171,7 @@
     experience
     status
     sender_id
+    改：position_name
 }
 ```
 
@@ -405,6 +405,70 @@
 #delete issue if issue.id == id
 {
     success
+}
+```
+
+
+
+统计用户数据
+
+返回user各个type的数量
+
+```js
+//input
+{}
+//output
+{
+    student_num,
+    teacher_num,
+    schoolmate_num
+}
+```
+
+返回已经注册的学校，公司，实验室的数量
+
+```js
+//input
+{}
+//output
+{
+    school_num,
+    enterprise_num,
+    lab_num
+}
+```
+
+
+
+统计岗位数据
+
+薪酬分布
+
+```js
+//input
+{}
+//output
+{
+    num1: //3k以下
+    num2: //3k-5k
+    num3: //5k-8k
+    num4: //8k-10k
+    num5: //10k以上
+}
+```
+
+
+
+领域分布
+
+```js
+//input
+{}
+//output
+{
+    num1: //IT科技
+    num2: //文化传媒
+    num3: //金融财务
 }
 ```
 

@@ -328,6 +328,21 @@ def createAdminer(id, username, real_name, password, sex, type, status):
     close_database(connection, cursor)
 
 
+def findResumeByPosition(position_id):
+    connection, cursor = connect_database()
+
+    instruction = "select * from login_resume where position_id=%s"
+
+    try:
+        cursor.execute(instruction, [position_id])
+    except Exception as e:
+        connection.rollback()
+        print("执行MySQL错误")
+    result = cursor.fetchall()
+    close_database(connection, cursor)
+    return result
+
+
 def findResume(resume_id):
     connection, cursor = connect_database()
 
@@ -335,6 +350,23 @@ def findResume(resume_id):
 
     try:
         cursor.execute(instruction, [resume_id])
+    except Exception as e:
+        connection.rollback()
+        print("执行MySQL错误")
+    result = cursor.fetchall()
+    close_database(connection, cursor)
+    return result
+
+
+def findPositionWithPosPublisherId(posPublisher_id):
+    connection, cursor = connect_database()
+
+    instruction = "select * from login_position" \
+                  "where posPublisher_id=%s"
+
+    try:
+        cursor.execute(instruction, [posPublisher_id])
+        connection.commit()
     except Exception as e:
         connection.rollback()
         print("执行MySQL错误")
@@ -508,7 +540,6 @@ def findPost(id):
     return result
 
 
-
 def createResume(id, name, edu_background, per_statement, experience, status, sender_id):
     connection, cursor = connect_database()
 
@@ -566,30 +597,15 @@ def findWaitingRegister():
     close_database(connection, cursor)
 
 
-def findResumeReceiver(resume_receiver_id):
+def positionGetResume(position_id, resume_id):
     connection, cursor = connect_database()
 
-    instruction = "select * from login_resume_receiver where id=%s"
+    instruction = "update login_position" \
+                  "set resume_id=%s" \
+                  "where id=%s"
 
     try:
-        cursor.execute(instruction, [resume_receiver_id])
-    except Exception as e:
-        connection.rollback()
-        print("执行MySQL错误")
-    result = cursor.fetchall()
-    close_database(connection, cursor)
-
-    return result
-
-
-def createResumeReceiver(id, resume_id, receiver_id):
-    connection, cursor = connect_database()
-
-    instruction = "insert into login_resume_receiver(id,resume_id,receiver_id)" \
-                  "values(%s,%s,%s)"
-
-    try:
-        cursor.execute(instruction, [id, resume_id, receiver_id])
+        cursor.execute(instruction, [resume_id, position_id])
         connection.commit()
     except Exception as e:
         connection.rollback()
@@ -601,8 +617,8 @@ def createResumeReceiver(id, resume_id, receiver_id):
 def findReceivedResumes(receiver_id):
     connection, cursor = connect_database()
 
-    instruction = "select login_resume.* from login_resume, login_resume_receiver" \
-                  "where login_resume.id=login_resume_receiver.resume_id and login_resume.receiver_id=%s"
+    instruction = "select login_resume.*, login_position.name from login_resume, login_position" \
+                  "where login_resume.id=login_position.resume_id and login_posPublisher_id=%s"
 
     try:
         cursor.execute(instruction, [receiver_id])
@@ -712,6 +728,57 @@ def createEnterprise(id, name, industry):
     close_database(connection, cursor)
 
 
+def getStudentNum():
+    connection, cursor = connect_database()
+
+    instruction = "select count(*) from login_user " \
+                  "where type=%s"
+
+    try:
+        cursor.execute(instruction, ['0'])
+    except Exception as e:
+        connection.rollback()
+        print("执行MySQL错误")
+    result = cursor.fetchall()
+    close_database(connection, cursor)
+
+    return result
+
+
+def getTeacherNum():
+    connection, cursor = connect_database()
+
+    instruction = "select count(*) from login_user " \
+                  "where type=%s"
+
+    try:
+        cursor.execute(instruction, ['1'])
+    except Exception as e:
+        connection.rollback()
+        print("执行MySQL错误")
+    result = cursor.fetchall()
+    close_database(connection, cursor)
+
+    return result
+
+
+def getSchoolMateNum():
+    connection, cursor = connect_database()
+
+    instruction = "select count(*) from login_user " \
+                  "where type=%s"
+
+    try:
+        cursor.execute(instruction, ['2'])
+    except Exception as e:
+        connection.rollback()
+        print("执行MySQL错误")
+    result = cursor.fetchall()
+    close_database(connection, cursor)
+
+    return result
+
+
 def clearAdminer():
     connection, cursor = connect_database()
 
@@ -806,21 +873,6 @@ def clearResume():
     connection, cursor = connect_database()
 
     instruction = "delete from login_resume;"
-
-    try:
-        cursor.execute(instruction)
-        connection.commit()
-    except Exception as e:
-        connection.rollback()
-        print("执行MySQL错误")
-
-    close_database(connection, cursor)
-
-
-def clearResumeReceiver():
-    connection, cursor = connect_database()
-
-    instruction = "delete from login_resume_receiver;"
 
     try:
         cursor.execute(instruction)
@@ -936,7 +988,6 @@ def createPosPublisherIdOnly(id):
 
 
 if __name__ == "__main__":
-    clearResumeReceiver()
     clearResume()
     clearPosition()
     clearStudent()
@@ -956,6 +1007,8 @@ if __name__ == "__main__":
     createPosition('wh-work', 'work', 'to be wh xiaodi', 'male', '1234', 'wh', 'beijing', '1', '2', '')
     createPosition('cjj-work', 'work', 'to be cjj baobiao', 'female', '5678', 'cjj', 'sh', '1', '', '')
     rst = findAllPosition()
+    num = getStudentNum()
+    print(getStudentNum())
     print(rst)
 '''
     for i in range(5):

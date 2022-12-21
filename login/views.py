@@ -230,13 +230,13 @@ class MakeResume(APIView):
 
 class SendResume(APIView):
     def get(self, request):
-        id = request.GET.get('id')
+        position_id = request.GET.get('position_id')
 
+        resumes = sql.findResumeByPosition(position_id)
 
-        if len(resume_receiver) == 0:
-            resume_id = request.GET.get('resume')
-            pospublisher_id = request.GET.get('receiver')
-            sql.createResumeReceiver(id, resume_id, pospublisher_id)
+        if len(resumes) == 0:
+            resume_id = request.GET.get('resume_id')
+            sql.positionGetResume(position_id, resume_id)
             return Response({'success': True})
         else:
             return Response({'success': False})
@@ -255,7 +255,7 @@ class LookReceiveResume(APIView):
         while i < length:
             response.append({'id': resumes[i][0], 'name': resumes[i][1],
                              'edu_background': resumes[i][2], 'per_statement': resumes[i][3],
-                             'status': resumes[i][3], 'sender_id': resumes[i][4]})
+                             'status': resumes[i][3], 'sender_id': resumes[i][4], 'position_name': resumes[i][5]})
             i += 1
 
         return Response(response)
@@ -345,6 +345,19 @@ class SearchPosition(APIView):
         return Response(response)
 
 
+class SearchMySendPosition(APIView):
+    def get(self, request):
+        posPublisher_id = request.GET.get('posPublisher_id')
+
+        positions = sql.findPositionWithPosPublisherId(posPublisher_id)
+
+        response = []
+        for p in positions:
+            response.append({'id': p[0], 'name': p[1], 'description': p[2], 'demanding': p[3], 'salary': p[4],
+                             'place': p[5], 'label1': p[6], 'label2': p[7], 'label3': p[8]})
+        return Response(response)
+
+
 class DeletePosition(APIView):
     def get(self, request):
         id = request.GET.get('id')
@@ -418,4 +431,7 @@ class DeletePost(APIView):
 
         return Response({'success': True})
 
+
+class StatisticUserType(APIView):
+    def get(self, request):
 

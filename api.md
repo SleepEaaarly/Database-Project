@@ -143,8 +143,8 @@
 ```js
 //input
 {
-    resume(sender+name)
-    改：position.id(receiver+position.name)
+    resume_id(sender+name)
+    改：position_id(receiver+position.name)
 }
 //output
 {
@@ -270,7 +270,6 @@
     demanding
     salary
     place
-    改：lab.id / enterprise.id
 }
 ]
 ```
@@ -280,7 +279,7 @@
 ```js
 //input
 {
-    pospublisher
+    posPublisher_id
 }
 //output 
 [

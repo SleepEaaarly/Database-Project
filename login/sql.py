@@ -18,8 +18,8 @@ def close_database(connection, cursor):
 
 
 def updateUserInfo(connection, cursor, id, real_name, sex):
-    instruction = "update login_user" \
-                  "set real_name=%s, sex=%s" \
+    instruction = "update login_user " \
+                  "set real_name=%s, sex=%s " \
                   "where id=%s"
 
     try:
@@ -33,8 +33,8 @@ def updateUserInfo(connection, cursor, id, real_name, sex):
 def updateStudentInfo(id, real_name, sex, school_name, grade, major):
     connection, cursor = connect_database()
     updateUserInfo(connection, cursor, id, real_name, sex)
-    instruction = "update login_student" \
-                  "set school_name=%s, grade=%s, major=%s" \
+    instruction = "update login_student " \
+                  "set school_name=%s, grade=%s, major=%s " \
                   "where id=%s"
 
     try:
@@ -53,8 +53,8 @@ def updateTeacherInfo(id, real_name, sex, profession_title, research_direction, 
     connection, cursor = connect_database()
     updateUserInfo(connection, cursor, id, real_name, sex)
     # 不用更新PosPublisher信息
-    instruction = "update login_teacher" \
-                  "set profession_title=%s, research_direction=%s, lab_belonging_id=%s" \
+    instruction = "update login_teacher " \
+                  "set profession_title=%s, research_direction=%s, lab_belonging_id=%s " \
                   "where id=%s"
 
     try:
@@ -73,8 +73,8 @@ def updateSchoolMateInfo(id, real_name, sex, school_name, work_field, enterprise
     connection, cursor = connect_database()
     updateUserInfo(connection, cursor, id, real_name, sex)
     # 不用更新PosPublisher信息
-    instruction = "update login_schoolmate" \
-                  "set school_name=%s, work_field=%s, enterprise_belonging_id=%s" \
+    instruction = "update login_schoolmate " \
+                  "set school_name=%s, work_field=%s, enterprise_belonging_id=%s " \
                   "where id=%s"
 
     try:
@@ -95,8 +95,8 @@ def updateAdminerInfo(id, real_name, sex):
 
 def updatePassword(id, password):
     connection, cursor = connect_database()
-    instruction = "update login_user" \
-                  "set password=%s" \
+    instruction = "update login_user " \
+                  "set password=%s " \
                   "where id=%s"
 
     try:
@@ -153,7 +153,7 @@ def findStudent(student_id):
 
 def findTeacher(teacher_id):
     connection, cursor = connect_database()
-    instruction = "select * from login_teacher where user_ptr_id=%s"
+    instruction = "select * from login_teacher where pospublisher_ptr_id=%s"
 
     try:
         cursor.execute(instruction, [teacher_id])
@@ -167,7 +167,7 @@ def findTeacher(teacher_id):
 
 def findSchoolMate(schoolMate_id):
     connection, cursor = connect_database()
-    instruction = "select * from login_schoolmate where user_ptr_id=%s"
+    instruction = "select * from login_schoolmate where pospublisher_ptr_id=%s"
 
     try:
         cursor.execute(instruction, [schoolMate_id])
@@ -229,7 +229,7 @@ def createStudent(id, username, real_name, password, sex, type, school_name, gra
     createUser(id, username, real_name, password, sex, type, status)
     connection, cursor = connect_database()
 
-    instruction = "insert into login_student(user_ptr_id, school_name, grade, major)" \
+    instruction = "insert into login_student(user_ptr_id, school_name, grade, major) " \
                   "values(%s,%s,%s,%s)"
 
     try:
@@ -258,7 +258,7 @@ def createUser(id, username, real_name, password, sex, type, status):
 
 def createPosPublisher(id):
     connection, cursor = connect_database()
-    instruction = "insert into login_pospublisher(user_ptr_id)" \
+    instruction = "insert into login_pospublisher(user_ptr_id) " \
                   "values(%s)"
 
     try:
@@ -278,7 +278,7 @@ def createTeacher(id, username, real_name, password, sex, type, profession_title
     connection, cursor = connect_database()
 
 
-    instruction = "insert into login_teacher(pospublisher_ptr_id, profession_title, lab_belonging_id, research_direction)" \
+    instruction = "insert into login_teacher(pospublisher_ptr_id, profession_title, lab_belonging_id, research_direction) " \
                   "values(%s,%s,%s,%s)"
 
     try:
@@ -293,12 +293,12 @@ def createTeacher(id, username, real_name, password, sex, type, profession_title
 
 def createSchoolMate(id, username, real_name, password, sex, type, school_name, work_field, enterprise_belonging_id, status):
     if len(findEnterprise(enterprise_belonging_id)) == 0:
-        createEnterprise(id, id, "None")
+        createEnterprise(enterprise_belonging_id, enterprise_belonging_id, "None")
     createUser(id, username, real_name, password, sex, type, status)
     createPosPublisher(id)
     connection, cursor = connect_database()
 
-    instruction = "insert into login_schoolmate(pospublisher_ptr_id, school_name, work_field, enterprise_belonging_id)" \
+    instruction = "insert into login_schoolmate(pospublisher_ptr_id, school_name, work_field, enterprise_belonging_id) " \
                   "values(%s,%s,%s,%s)"
 
     try:
@@ -315,7 +315,7 @@ def createAdminer(id, username, real_name, password, sex, type, status):
     createUser(id, username, real_name, password, sex, type, status)
     connection, cursor = connect_database()
 
-    instruction = "insert into login_adminer(user_ptr_id)" \
+    instruction = "insert into login_adminer(user_ptr_id) " \
                   "values(%s)"
 
     try:
@@ -361,7 +361,7 @@ def findResume(resume_id):
 def findPositionWithPosPublisherId(posPublisher_id):
     connection, cursor = connect_database()
 
-    instruction = "select * from login_position" \
+    instruction = "select * from login_position " \
                   "where posPublisher_id=%s"
 
     try:
@@ -378,7 +378,7 @@ def findPositionWithPosPublisherId(posPublisher_id):
 def findPositionWithPlace(place):
     connection, cursor = connect_database()
 
-    instruction = "select * from login_position" \
+    instruction = "select * from login_position " \
                   "where place=%s"
 
     try:
@@ -395,7 +395,7 @@ def findPositionWithPlace(place):
 def findPositionWithSalary(salary):
     connection, cursor = connect_database()
 
-    instruction = "select * from login_position" \
+    instruction = "select * from login_position " \
                   "where salary=%s"
 
     try:
@@ -412,8 +412,8 @@ def findPositionWithSalary(salary):
 def findPositionWithLabel3(label3):
     connection, cursor = connect_database()
 
-    instruction = "select * from login_position" \
-                  "where label2=%s"
+    instruction = "select * from login_position " \
+                  "where label3=%s"
 
     try:
         cursor.execute(instruction, [label3])
@@ -429,7 +429,7 @@ def findPositionWithLabel3(label3):
 def findPositionWithLabel2(label2):
     connection, cursor = connect_database()
 
-    instruction = "select * from login_position" \
+    instruction = "select * from login_position " \
                   "where label2=%s"
 
     try:
@@ -446,8 +446,8 @@ def findPositionWithLabel2(label2):
 def updateUserStatus(id):
     connection, cursor = connect_database()
 
-    instruction = "update login_user" \
-                  "set status=%s" \
+    instruction = "update login_user " \
+                  "set status=%s " \
                   "where id=%s"
 
     try:
@@ -462,7 +462,7 @@ def updateUserStatus(id):
 def deleteUser(id):
     connection, cursor = connect_database()
 
-    instruction = "delete from login_user" \
+    instruction = "delete from login_user " \
                   "where id=%s"
 
     try:
@@ -477,7 +477,7 @@ def deleteUser(id):
 def findPositionWithLabel1(label1):
     connection, cursor = connect_database()
 
-    instruction = "select * from login_position" \
+    instruction = "select * from login_position " \
                   "where label1=%s"
 
     try:
@@ -526,7 +526,7 @@ def findAllPost():
 def findPost(id):
     connection, cursor = connect_database()
 
-    instruction = "select * from login_post" \
+    instruction = "select * from login_post " \
                   "where id=%s"
 
     try:
@@ -543,7 +543,7 @@ def findPost(id):
 def createResume(id, name, edu_background, per_statement, experience, status, sender_id):
     connection, cursor = connect_database()
 
-    instruction = "insert into login_resume(id,name,edu_background,per_statement,experience,status,sender_id)" \
+    instruction = "insert into login_resume(id,name,edu_background,per_statement,experience,status,sender_id) " \
                   "values(%s,%s,%s,%s,%s,%s,%s)"
 
     try:
@@ -600,8 +600,8 @@ def findWaitingRegister():
 def positionGetResume(position_id, resume_id):
     connection, cursor = connect_database()
 
-    instruction = "update login_position" \
-                  "set resume_id=%s" \
+    instruction = "update login_position " \
+                  "set resume_id=%s " \
                   "where id=%s"
 
     try:
@@ -617,7 +617,7 @@ def positionGetResume(position_id, resume_id):
 def findReceivedResumes(receiver_id):
     connection, cursor = connect_database()
 
-    instruction = "select login_resume.*, login_position.name from login_resume, login_position" \
+    instruction = "select login_resume.*, login_position.name from login_resume, login_position " \
                   "where login_resume.id=login_position.resume_id and login_posPublisher_id=%s"
 
     try:
@@ -634,7 +634,7 @@ def findReceivedResumes(receiver_id):
 def findMyResumes(sender_id):
     connection, cursor = connect_database()
 
-    instruction = "select * from login_resume" \
+    instruction = "select * from login_resume " \
                   "where sender_id=%s"
 
     try:
@@ -651,8 +651,8 @@ def findMyResumes(sender_id):
 def updateResumeStatus(id, status):
     connection, cursor = connect_database()
 
-    instruction = "update login_resume" \
-                  "set status=%s" \
+    instruction = "update login_resume " \
+                  "set status=%s " \
                   "where id=%s"
 
     try:
@@ -667,7 +667,7 @@ def updateResumeStatus(id, status):
 
 def deleteResume(id):
     connection, cursor = connect_database()
-    instruction = "delete from login_resume" \
+    instruction = "delete from login_resume " \
                   "where id=%s"
 
     try:
@@ -683,7 +683,7 @@ def deleteResume(id):
 def createLab(id, name):
     connection, cursor = connect_database()
 
-    instruction = "insert into login_lab(id,name)" \
+    instruction = "insert into login_lab(id,name) " \
                   "values(%s,%s)"
 
     try:
@@ -699,7 +699,7 @@ def createLab(id, name):
 def createEnterpriseOnlyId(id, name):
     connection, cursor = connect_database()
 
-    instruction = "insert into login_enterprise(id,name)" \
+    instruction = "insert into login_enterprise(id,name) " \
                   "values(%s,%s)"
 
     try:
@@ -715,7 +715,7 @@ def createEnterpriseOnlyId(id, name):
 def createEnterprise(id, name, industry):
     connection, cursor = connect_database()
 
-    instruction = "insert into login_enterprise(id,name,industry)" \
+    instruction = "insert into login_enterprise(id,name,industry) " \
                   "values(%s,%s,%s)"
 
     try:
@@ -830,7 +830,7 @@ def getLabNum():
 def getSalaryNum(salary_range):
     connection, cursor = connect_database()
 
-    instruction = "select count(*) from login_position" \
+    instruction = "select count(*) from login_position " \
                   "where salary=%s"
 
     try:
@@ -847,7 +847,7 @@ def getSalaryNum(salary_range):
 def getLabel1Num(label1):
     connection, cursor = connect_database()
 
-    instruction = "select count(*) from login_position" \
+    instruction = "select count(*) from login_position " \
                   "where label1=%s"
 
     try:
@@ -1030,7 +1030,7 @@ def createPost(id, title, content):
 
     connection, cursor = connect_database()
 
-    instruction = "insert into login_post(id,title,content)" \
+    instruction = "insert into login_post(id,title,content) " \
                   "values(%s,%s,%s)"
 
     try:
@@ -1047,7 +1047,7 @@ def createPosition(id, name, description, demanding, salary, posPublisher, place
 
     connection, cursor = connect_database()
 
-    instruction = "insert into login_position(id,name,description,demanding,salary,posPublisher_id,place,label1,label2,label3)" \
+    instruction = "insert into login_position(id,name,description,demanding,salary,posPublisher_id,place,label1,label2,label3) " \
                   "values(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"
 
     try:
@@ -1083,6 +1083,10 @@ if __name__ == "__main__":
     createUserIdOnly("wh", "wh")
     createPosPublisherIdOnly("wh")
 
+
+    createStudent("1","1","李松泽","1","男","0",'1','大三','1','1')
+    createSchoolMate('wxz777', 'wxz777', 'wxz777', 'wxz777', '男', '2', '', '', '', '1')
+    # createPosition("1-软件工程师", '软件工程师', '1', 'x', 'x', '3k以下', '北京', 'IT科技', '计算机', '软件工程师')
 '''
     createUserIdOnly("cjj", "cjj")
     createPosPublisherIdOnly("cjj")

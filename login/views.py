@@ -232,7 +232,6 @@ class SendResume(APIView):
     def get(self, request):
         id = request.GET.get('id')
 
-        resume_receiver = sql.findResumeReceiver(id)
 
         if len(resume_receiver) == 0:
             resume_id = request.GET.get('resume')

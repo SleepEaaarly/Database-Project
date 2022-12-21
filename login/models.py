@@ -104,15 +104,9 @@ class Resume(models.Model):
     per_statement = models.CharField(max_length=1024)
     experience = models.CharField(max_length=1024)
     sender = models.ForeignKey(Student, on_delete=models.CASCADE, blank=True, null=True)
-    receiver = models.ManyToManyField(to=PosPublisher, through='Resume_Receiver')
+    position = models.ForeignKey(Position, on_delete=models.CASCADE, blank=True, null=True)
     status = models.CharField(max_length=8)
     # init "0"
-
-
-class Resume_Receiver(models.Model):
-    id = models.CharField(primary_key=True, max_length=128)
-    resume = models.ForeignKey(Resume, on_delete=models.CASCADE)
-    receiver = models.ForeignKey(PosPublisher, on_delete=models.CASCADE)
 
 
 class Adminer(User):

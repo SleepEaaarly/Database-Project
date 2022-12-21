@@ -143,7 +143,6 @@
 ```js
 //input
 {
-    id (sender+receiver+position.name)
     resume(sender+name)
     改：position.id(receiver+position.name)
 }

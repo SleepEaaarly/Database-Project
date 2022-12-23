@@ -221,7 +221,8 @@ class MakeResume(APIView):
             edu_background = request.GET.get('edu_background')
             per_statement = request.GET.get('per_statement')
             experience = request.GET.get('experience')
-            status = "0"
+            status = request.GET.get('status')
+            # status = "0"
             sql.createResume(id, name, edu_background, per_statement, experience, status, sender_id)
             return Response({'success': True})
         else:
@@ -231,12 +232,12 @@ class MakeResume(APIView):
 class SendResume(APIView):
     def get(self, request):
         position_id = request.GET.get('position_id')
+        resume_id = request.GET.get('resume_id')
 
-        resumes = sql.findResumeByPosition(position_id)
+        resumes = sql.findResumeByPosition(resume_id)
 
         if len(resumes) == 0:
-            resume_id = request.GET.get('resume_id')
-            sql.positionGetResume(position_id, resume_id)
+            sql.resumeReachPosition(position_id, resume_id)
             return Response({'success': True})
         else:
             return Response({'success': False})
@@ -255,7 +256,8 @@ class LookReceiveResume(APIView):
         while i < length:
             response.append({'id': resumes[i][0], 'name': resumes[i][1],
                              'edu_background': resumes[i][2], 'per_statement': resumes[i][3],
-                             'status': resumes[i][3], 'sender_id': resumes[i][4], 'position_name': resumes[i][5]})
+                             'experience': resumes[i][4], 'status': resumes[i][5], 'sender_id': resumes[i][6],
+                             'position_id': resumes[i][7]})
             i += 1
 
         return Response(response)
@@ -274,7 +276,7 @@ class LookMyResume(APIView):
         while i < length:
             response.append({'id': resumes[i][0], 'name': resumes[i][1],
                              'edu_background': resumes[i][2], 'per_statement': resumes[i][3],
-                             'status': resumes[i][3], 'sender_id': resumes[i][4]})
+                             'experience': resumes[i][4], 'status': resumes[i][5], 'sender_id': resumes[i][6]})
             i += 1
 
         return Response(response)
@@ -354,7 +356,7 @@ class SearchMySendPosition(APIView):
         response = []
         for p in positions:
             response.append({'id': p[0], 'name': p[1], 'description': p[2], 'demanding': p[3], 'salary': p[4],
-                             'place': p[5], 'label1': p[6], 'label2': p[7], 'label3': p[8]})
+                             'place': p[5], 'label': [p[6], p[7], p[8]]})
         return Response(response)
 
 
@@ -362,6 +364,7 @@ class DeletePosition(APIView):
     def get(self, request):
         id = request.GET.get('id')
 
+        sql.updateResumePositionFkNull(id)
         sql.deletePosition(id)
 
         return Response({'success': True})
@@ -391,6 +394,16 @@ class PassRegister(APIView):
 class DeleteRegister(APIView):
     def get(self, request):
         username = request.GET.get('username')
+
+        type = sql.findUser(username)[0][6]
+        if type == "0":
+            sql.deleteStudent(username)
+        elif type == "1":
+            sql.deleteTeacher(username)
+            sql.deletePosPublisher(username)
+        else:
+            sql.deleteSchoolmate(username)
+            sql.deletePosPublisher(username)
 
         sql.deleteUser(username)
 
@@ -452,19 +465,19 @@ class StatisticPlaceType(APIView):
 
 class StatisticSalaryType(APIView):
     def get(self, request):
-        num1 = sql.getSalaryNum('3k以下')
-        num2 = sql.getSalaryNum('3k-5k')
-        num3 = sql.getSalaryNum('5k-8k')
-        num4 = sql.getSalaryNum('8k-10k')
-        num5 = sql.getSalaryNum('10k以上')
+        num1 = sql.getSalaryNum('3k以下')[0][0]
+        num2 = sql.getSalaryNum('3k-5k')[0][0]
+        num3 = sql.getSalaryNum('5k-8k')[0][0]
+        num4 = sql.getSalaryNum('8k-10k')[0][0]
+        num5 = sql.getSalaryNum('10k以上')[0][0]
 
         return Response({'num1': num1, 'num2': num2, 'num3': num3, 'num4': num4, 'num5': num5})
 
 
 class StatisticLabel1Type(APIView):
     def get(self, request):
-        num1 = sql.getLabel1Num('IT科技')
-        num2 = sql.getLabel1Num('文化传媒')
-        num3 = sql.getLabel1Num('金融财务')
+        num1 = sql.getLabel1Num('IT科技')[0][0]
+        num2 = sql.getLabel1Num('文化传媒')[0][0]
+        num3 = sql.getLabel1Num('金融财务')[0][0]
 
         return Response({'num1': num1, 'num2': num2, 'num3': num3})

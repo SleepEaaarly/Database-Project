@@ -89,7 +89,6 @@ class Position(models.Model):
     label1 = models.CharField(max_length=128, blank=True, null=True)
     label2 = models.CharField(max_length=128, blank=True, null=True)
     label3 = models.CharField(max_length=128, blank=True, null=True)
-    resume = models.ForeignKey("Resume", on_delete=models.CASCADE, blank=True, null=True)
 
 
 class Post(models.Model):
@@ -106,6 +105,7 @@ class Resume(models.Model):
     experience = models.CharField(max_length=1024)
     sender = models.ForeignKey(Student, on_delete=models.CASCADE, blank=True, null=True)
     status = models.CharField(max_length=8)
+    position = models.ForeignKey(Position, on_delete=models.CASCADE, blank=True, null=True)
     # init "0"
 
 

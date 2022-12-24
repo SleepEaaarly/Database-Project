@@ -65,6 +65,7 @@ class Login(APIView):
             response['success'] = 0
             return Response(response)
 
+
 '''
 class Login(APIView):
     def get(self, request):
@@ -94,6 +95,7 @@ class Login(APIView):
             response['success'] = 0
             return Response(response)
 '''
+
 
 class Register(APIView):
     def get(self, request):
@@ -342,7 +344,8 @@ class SearchPosition(APIView):
         response = []
 
         for p in positionSet:
-            response.append({'id': p[0], 'name': p[1], 'description': p[2], 'demanding': p[3], 'salary': p[4], 'place': p[5]})
+            response.append(
+                {'id': p[0], 'name': p[1], 'description': p[2], 'demanding': p[3], 'salary': p[4], 'place': p[5]})
 
         return Response(response)
 
@@ -377,7 +380,9 @@ class LookRegisterInfo(APIView):
         response = []
 
         for u in user:
-            response.append({'id': u[0], 'username': u[1], 'real_name': u[2], 'password': u[3], 'sex': u[4], 'status': u[5], 'type': u[6]})
+            response.append(
+                {'id': u[0], 'username': u[1], 'real_name': u[2], 'password': u[3], 'sex': u[4], 'status': u[5],
+                 'type': u[6]})
 
         return Response(response)
 

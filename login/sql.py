@@ -6,7 +6,7 @@ def connect_database():
                                  port=3306,
                                  db="blink_v0",
                                  user="root",
-                                 passwd="paradise2002",
+                                 passwd="root",
                                  charset="utf8")
     cursor = connection.cursor()
     return connection, cursor
@@ -23,7 +23,7 @@ def updateUserInfo(connection, cursor, id, real_name, sex):
                   "where id=%s"
 
     try:
-        cursor.execute(instruction, [real_name,sex,id])
+        cursor.execute(instruction, [real_name, sex, id])
         connection.commit()
     except Exception as e:
         connection.rollback()
@@ -90,11 +90,11 @@ def updateSchoolMateInfo(id, real_name, sex, school_name, work_field, enterprise
     updateUserInfo(connection, cursor, id, real_name, sex)
     # 不用更新PosPublisher信息
     instruction = "update login_schoolmate " \
-                  "set school_name=%s, work_field=%s, enterprise_belonging_id=%s " \
+                  "set school_name=%s, work_field=%s " \
                   "where pospublisher_ptr_id=%s"
 
     try:
-        cursor.execute(instruction, [school_name, work_field, enterprise_belonging_id, id])
+        cursor.execute(instruction, [school_name, work_field, id])
         connection.commit()
     except Exception as e:
         connection.rollback()
@@ -124,6 +124,21 @@ def updatePassword(id, password):
 
     close_database(connection, cursor)
 
+
+def updateResumePositionFkNull(id):
+    connection, cursor = connect_database()
+
+    instruction = "update login_resume " \
+                  "set position_id=null " \
+                  "where position_id=%s"
+
+    try:
+        cursor.execute(instruction, [id])
+        connection.commit()
+    except Exception as e:
+        connection.rollback()
+        print("执行MySQL错误")
+    close_database(connection, cursor)
 
 def findPosPublisher(posPublisher_id):
     connection, cursor = connect_database()
@@ -285,7 +300,7 @@ def createStudent(id, username, real_name, password, sex, type, school_name, gra
                   "values(%s,%s,%s,%s)"
 
     try:
-        cursor.execute(instruction, [id,school_name,grade,major])
+        cursor.execute(instruction, [id, school_name, grade, major])
         connection.commit()
     except Exception as e:
         connection.rollback()
@@ -300,7 +315,7 @@ def createUser(id, username, real_name, password, sex, type, status):
                   "values(%s,%s,%s,%s,%s,%s,%s)"
 
     try:
-        cursor.execute(instruction, [id,username,real_name,password,sex,status,type])
+        cursor.execute(instruction, [id, username, real_name, password, sex, status, type])
         connection.commit()
     except Exception as e:
         connection.rollback()
@@ -322,13 +337,13 @@ def createPosPublisher(id):
     close_database(connection, cursor)
 
 
-def createTeacher(id, username, real_name, password, sex, type, profession_title, lab_belonging_id, research_direction, status):
+def createTeacher(id, username, real_name, password, sex, type, profession_title, lab_belonging_id, research_direction,
+                  status):
     if len(findLab(lab_belonging_id)) == 0:
         createLab(lab_belonging_id, lab_belonging_id)
     createUser(id, username, real_name, password, sex, type, status)
     createPosPublisher(id)
     connection, cursor = connect_database()
-
 
     instruction = "insert into login_teacher(pospublisher_ptr_id, profession_title, lab_belonging_id, research_direction) " \
                   "values(%s,%s,%s,%s)"
@@ -343,7 +358,8 @@ def createTeacher(id, username, real_name, password, sex, type, profession_title
     close_database(connection, cursor)
 
 
-def createSchoolMate(id, username, real_name, password, sex, type, school_name, work_field, enterprise_belonging_id, status):
+def createSchoolMate(id, username, real_name, password, sex, type, school_name, work_field, enterprise_belonging_id,
+                     status):
     if len(findEnterprise(enterprise_belonging_id)) == 0:
         createEnterprise(enterprise_belonging_id, enterprise_belonging_id, "None")
     createUser(id, username, real_name, password, sex, type, status)
@@ -506,22 +522,6 @@ def updateUserStatus(id):
 
     try:
         cursor.execute(instruction, ["1", id])
-        connection.commit()
-    except Exception as e:
-        connection.rollback()
-        print("执行MySQL错误")
-    close_database(connection, cursor)
-
-
-def updateResumePositionFkNull(id):
-    connection, cursor = connect_database()
-
-    instruction = "update login_resume " \
-                  "set position_id=null " \
-                  "where position_id=%s"
-
-    try:
-        cursor.execute(instruction, [id])
         connection.commit()
     except Exception as e:
         connection.rollback()
@@ -827,6 +827,7 @@ def createLab(id, name):
         cursor.execute(instruction, [id, name])
         connection.commit()
     except Exception as e:
+        print(11111)
         connection.rollback()
         print("执行MySQL错误")
 
@@ -840,7 +841,7 @@ def createEnterpriseOnlyId(id, name):
                   "values(%s,%s)"
 
     try:
-        cursor.execute(instruction, [id,name])
+        cursor.execute(instruction, [id, name])
         connection.commit()
     except Exception as e:
         connection.rollback()
@@ -856,7 +857,7 @@ def createEnterprise(id, name, industry):
                   "values(%s,%s,%s)"
 
     try:
-        cursor.execute(instruction, [id,name,industry])
+        cursor.execute(instruction, [id, name, industry])
         connection.commit()
     except Exception as e:
         connection.rollback()
@@ -1172,14 +1173,13 @@ def clearUser():
 
 
 def createPost(id, title, content):
-
     connection, cursor = connect_database()
 
     instruction = "insert into login_post(id,title,content) " \
                   "values(%s,%s,%s)"
 
     try:
-        cursor.execute(instruction, [id,title,content])
+        cursor.execute(instruction, [id, title, content])
         connection.commit()
     except Exception as e:
         connection.rollback()
@@ -1189,14 +1189,14 @@ def createPost(id, title, content):
 
 
 def createPosition(id, name, description, demanding, salary, posPublisher, place, label1, label2, label3):
-
     connection, cursor = connect_database()
 
     instruction = "insert into login_position(id,name,description,demanding,salary,posPublisher_id,place,label1,label2,label3) " \
                   "values(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"
 
     try:
-        cursor.execute(instruction, [id,name,description,demanding,salary,posPublisher,place,label1,label2,label3])
+        cursor.execute(instruction,
+                       [id, name, description, demanding, salary, posPublisher, place, label1, label2, label3])
         connection.commit()
     except Exception as e:
         connection.rollback()
@@ -1214,64 +1214,64 @@ def createPosPublisherIdOnly(id):
 
 
 if __name__ == "__main__":
-
-    clearResume()
-    clearPosition()
-    clearStudent()
-    clearTeacher()
-    clearSchoolMate()
-    clearPosPublisher()
-    clearAdminer()
-    clearUser()
-    clearEnterprise()
-    clearLab()
-    clearPost()
-    createUserIdOnly("wh", "wh")
-    createPosPublisherIdOnly("wh")
-
-
-    createStudent("1","1","李松泽","1","男","0",'1','大三','1','1')
-    createResume('1-2', '1', '2', '2', '2', '0')
-#    createSchoolMate('wxz777', 'wxz777', 'wxz777', 'wxz777', '男', '2', '', '', '', '1')
-    # createPosition("1-软件工程师", '软件工程师', '1', 'x', 'x', '3k以下', '北京', 'IT科技', '计算机', '软件工程师')
-'''
-    createUserIdOnly("cjj", "cjj")
-    createPosPublisherIdOnly("cjj")
-    createPosition('wh-work', 'work', 'to be wh xiaodi', 'male', '1234', 'wh', 'beijing', '1', '2', '')
-    createPosition('cjj-work', 'work', 'to be cjj baobiao', 'female', '5678', 'cjj', 'sh', '1', '', '')
-    createStudent("lsz",'lsz','lsz','lsz250','male','0','BUAA','l_three', 'rap', "0")
-    createStudent("wxz", "wxz", "wxz", "wxz777", "male", "0", "BUAA", "l_three", "1", "1")
-    rst = findAllPosition()
-    num = getSchoolNum()
-    print(getSchoolNum())
-    print(rst)
-'''
-
-'''
-    for i in range(5):
-        createLab("lab"+str(i), "lab"+str(i))
-        createEnterprise("enterprise"+str(i), "enterprise"+str(i), "CS", "Beijing")
-
-    createStudent("lsz",'lsz','lsz','lsz250','male','0','THU','l_three','rap')
-    createStudent("wxz", "wxz", "wxz", "wxz777", "male", "0", "BUAA", "l_three", "cs")
-
-    createTeacher('wh','wh','wh','wh666','female','1','fujiaoshou','lab0','cs')
-    createTeacher('lr','lr','lr','lr666','male','1','jiaoshou','lab1','db')
-
-    createSchoolMate('cjj','cjj','cjj','cjj666','male','2','MIT','cs','enterprise0')
-    createSchoolMate('qs','qs','qs','qs666','male','2','Oxford','cs','enterprise1')
-
-    createAdminer('zfy','zfy','zfy','zfy666','male','3')
-
-    createPosition('wh-work', 'work', 'to be wh xiaodi', 'male', '1234', 'wh')
-    createPosition('cjj-work', 'work', 'to be cjj baobiao', 'female', '5678', 'cjj')
-
-    createResume('lsz-xiaodi', 'xiaodi', 'want to be wh xiaodi', 'lsz')
-    createResume('lsz-baobiao', 'baobiao', 'want to be cjj baobiao', 'lsz')
-
-    createResumeReceiver('lsz-xiaodi-wh', 'lsz-xiaodi', 'wh')
-    createResumeReceiver('lsz-baobiao-cjj', 'lsz-baobiao', 'cjj')
-
-    result = findUser('fff')
-    print(result)
-'''
+    createLab('lab', 'lab')
+#     clearResume()
+#     clearPosition()
+#     clearStudent()
+#     clearTeacher()
+#     clearSchoolMate()
+#     clearPosPublisher()
+#     clearAdminer()
+#     clearUser()
+#     clearEnterprise()
+#     clearLab()
+#     clearPost()
+#     createUserIdOnly("wh", "wh")
+#     createPosPublisherIdOnly("wh")
+#
+#
+#     createStudent("1","1","李松泽","1","男","0",'1','大三','1','1')
+#     createResume('1-2', '1', '2', '2', '2', '0')
+# #    createSchoolMate('wxz777', 'wxz777', 'wxz777', 'wxz777', '男', '2', '', '', '', '1')
+#     # createPosition("1-软件工程师", '软件工程师', '1', 'x', 'x', '3k以下', '北京', 'IT科技', '计算机', '软件工程师')
+# '''
+#     createUserIdOnly("cjj", "cjj")
+#     createPosPublisherIdOnly("cjj")
+#     createPosition('wh-work', 'work', 'to be wh xiaodi', 'male', '1234', 'wh', 'beijing', '1', '2', '')
+#     createPosition('cjj-work', 'work', 'to be cjj baobiao', 'female', '5678', 'cjj', 'sh', '1', '', '')
+#     createStudent("lsz",'lsz','lsz','lsz250','male','0','BUAA','l_three', 'rap', "0")
+#     createStudent("wxz", "wxz", "wxz", "wxz777", "male", "0", "BUAA", "l_three", "1", "1")
+#     rst = findAllPosition()
+#     num = getSchoolNum()
+#     print(getSchoolNum())
+#     print(rst)
+# '''
+#
+# '''
+#     for i in range(5):
+#         createLab("lab"+str(i), "lab"+str(i))
+#         createEnterprise("enterprise"+str(i), "enterprise"+str(i), "CS", "Beijing")
+#
+#     createStudent("lsz",'lsz','lsz','lsz250','male','0','THU','l_three','rap')
+#     createStudent("wxz", "wxz", "wxz", "wxz777", "male", "0", "BUAA", "l_three", "cs")
+#
+#     createTeacher('wh','wh','wh','wh666','female','1','fujiaoshou','lab0','cs')
+#     createTeacher('lr','lr','lr','lr666','male','1','jiaoshou','lab1','db')
+#
+#     createSchoolMate('cjj','cjj','cjj','cjj666','male','2','MIT','cs','enterprise0')
+#     createSchoolMate('qs','qs','qs','qs666','male','2','Oxford','cs','enterprise1')
+#
+#     createAdminer('zfy','zfy','zfy','zfy666','male','3')
+#
+#     createPosition('wh-work', 'work', 'to be wh xiaodi', 'male', '1234', 'wh')
+#     createPosition('cjj-work', 'work', 'to be cjj baobiao', 'female', '5678', 'cjj')
+#
+#     createResume('lsz-xiaodi', 'xiaodi', 'want to be wh xiaodi', 'lsz')
+#     createResume('lsz-baobiao', 'baobiao', 'want to be cjj baobiao', 'lsz')
+#
+#     createResumeReceiver('lsz-xiaodi-wh', 'lsz-xiaodi', 'wh')
+#     createResumeReceiver('lsz-baobiao-cjj', 'lsz-baobiao', 'cjj')
+#
+#     result = findUser('fff')
+#     print(result)
+# '''

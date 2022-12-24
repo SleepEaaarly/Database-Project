@@ -25,7 +25,7 @@ SECRET_KEY = "django-insecure-76^(*jp8qs(&0snhf7ojyfxmwbpfoo4=k8%^xhsqnp&nda2-gf
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["127.0.0.1"]
 
 
 # Application definition
@@ -79,7 +79,7 @@ DATABASES = {
         "ENGINE": "django.db.backends.mysql",
         "NAME": "Blink_v0",
         "USER": "root",
-        "PASSWORD": "paradise2002",
+        "PASSWORD": "root",
         "HOST": "127.0.0.1",
         "PORT": "3306",
     }

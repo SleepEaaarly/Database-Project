@@ -1,5 +1,6 @@
 from django.db import models
 
+
 # Create your models here.
 
 
@@ -113,10 +114,10 @@ class Adminer(User):
     # todo
     pass
 
+
 '''
 class Message(models.Model):
     sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name="message_sender", blank=True, null=True)
     receiver = models.ForeignKey(User, on_delete=models.CASCADE, related_name="message_receiver", blank=True, null=True)
     content = models.CharField(max_length=256)
 '''
-
